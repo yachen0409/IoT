@@ -1,0 +1,45 @@
+% Enter your MATLAB Code below
+% TODO - Replace the [] with channel ID to read data from:
+readChannelID = 1608288;
+% TODO - Enter the Read API Key between the '' below:
+readAPIKey = '0SRDOB2ZRGWB47CB';
+
+% TODO - Replace the [] with channel ID to read data from:
+writeChannelID2 = 1625967;
+writeAPIKey2 = 'ID4XQPE3VBPXYY01';
+
+%% Read Data %%
+temp1 = thingSpeakRead(readChannelID, 'ReadKey', readAPIKey, 'Fields', 1);
+humidity1 = thingSpeakRead(readChannelID, 'ReadKey', readAPIKey, 'Fields', 2);
+motion1 = thingSpeakRead(readChannelID, 'ReadKey', readAPIKey, 'Fields', 3);
+rfid1 = thingSpeakRead(readChannelID, 'ReadKey', readAPIKey, 'Fields', 4);
+ldr1 = thingSpeakRead(readChannelID, 'ReadKey', readAPIKey, 'Fields', 5);
+disp(temp1);
+disp(ldr1);
+%% Analyze Data %%
+% Add code in this section to analyze data and store the result in the
+% 'analyzedData' variable.
+modedata = 0;
+ldrdata = ldr1;
+if(temp1 > 24)
+    fandata = 1;
+else 
+    fandata = 0;
+end
+
+if(rfid1 == 1)
+    leddata = 1;
+else 
+    leddata = 0;
+end
+
+if(motion1 == 1)
+    pirdata = 1;
+else
+    pirdata = 0;
+end
+
+    
+%% Write Data %%
+%second rpi%
+thingSpeakWrite(writeChannelID2, [fandata, leddata, pirdata, ldrdata] ,'WriteKey', writeAPIKey2, 'Fields', [1,2,3,4]);
